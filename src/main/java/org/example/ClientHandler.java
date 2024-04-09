@@ -14,11 +14,14 @@ public class ClientHandler {
     private PrintWriter out;
     private String ipClient;
     private Parking parking;
+    private String plateUser="";
+    private CheckerPlate checkerPlate = new CheckerPlate();
     public ClientHandler(Socket socket, String ipClient) {
         this.socket = socket;
         this.ipClient = ipClient;
-        ran();
         parking = new Parking();
+        System.out.println("new client");
+        ran();
     }
 
     public void ran() {
@@ -47,14 +50,35 @@ public class ClientHandler {
         String mess;
         while (true) {
             mess = getMess();
-            if (mess != null || !mess.equalsIgnoreCase("")) {
-                out.println(mess);
-                System.out.println(mess);
-            }
-            if(mess.equalsIgnoreCase("")){
-                System.out.println("Client ("+ ipClient +") has disconnected!");
+            if(mess != null || !mess.equalsIgnoreCase("")) {
+                menuOutput(mess);
+            } else if (mess.equalsIgnoreCase("")) {
+                System.out.println("Client (" + ipClient + ") has disconnected!");
                 break;
             }
+        }
+    }
+
+    private void menuOutput(String mess){
+        boolean checkPlate;
+        if (plateUser.equalsIgnoreCase("")){
+            setPlateUser(mess);
+        }
+        if(parking.checkPlateParking(plateUser)){
+            out.println("1) Find car\n" +
+                        "2) Pay place\n" +
+                        "3) exit");
+        }else{
+            out.println("1) New place\n" +
+                        "2) exit\n");
+        }
+    }
+
+    private void setPlateUser(String mess) {
+        boolean checkPlate;
+        checkPlate = checkerPlate.validatePlate(mess);
+        if (checkPlate){
+            plateUser = mess;
         }
     }
 
