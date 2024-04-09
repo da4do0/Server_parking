@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import static java.lang.System.out;
-
 public class ClientHandler {
     private Socket socket;
     private BufferedReader read;
@@ -16,6 +14,8 @@ public class ClientHandler {
     private Parking parking;
     private String plateUser="";
     private CheckerPlate checkerPlate = new CheckerPlate();
+    private boolean findPlate;
+
     public ClientHandler(Socket socket, String ipClient) {
         this.socket = socket;
         this.ipClient = ipClient;
@@ -27,9 +27,19 @@ public class ClientHandler {
     public void ran() {
         readBuffer();
         createOut();
-        loopPrint();
+        askPlate();
+        findPlate = parking.checkPlateParking(plateUser);
+        int mess;
+        while(true) {
+            menuOutput(findPlate);
+            mess = getIntMess();
+            if(mess == 4){
+                break;
+            }
+            controllerChoise(mess);
+        }
     }
-
+    ////////////////////////////////////////////
     private void readBuffer() {
         try {
             read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -46,43 +56,22 @@ public class ClientHandler {
         }
     }
 
-    private void loopPrint() {
-        String mess;
-        while (true) {
-            mess = getMess();
-            if(mess != null || !mess.equalsIgnoreCase("")) {
-                menuOutput(mess);
-            } else if (mess.equalsIgnoreCase("")) {
-                System.out.println("Client (" + ipClient + ") has disconnected!");
-                break;
+    private void askPlate(){
+        boolean setUser;
+        out.println("Please, insert your car's plate");
+        out.println("Try: ");
+        do{
+            String mess = getStringMess();
+            setUser = setPlateUser(mess);
+            if (!setUser){
+                out.println("\nPlease, check your car's plate and retry");
+                out.println("Retry: ");
             }
-        }
+        }while(!setUser);
+        out.println("Caricamento dati in corso...");
     }
 
-    private void menuOutput(String mess){
-        boolean checkPlate;
-        if (plateUser.equalsIgnoreCase("")){
-            setPlateUser(mess);
-        }
-        if(parking.checkPlateParking(plateUser)){
-            out.println("1) Find car\n" +
-                        "2) Pay place\n" +
-                        "3) exit");
-        }else{
-            out.println("1) New place\n" +
-                        "2) exit\n");
-        }
-    }
-
-    private void setPlateUser(String mess) {
-        boolean checkPlate;
-        checkPlate = checkerPlate.validatePlate(mess);
-        if (checkPlate){
-            plateUser = mess;
-        }
-    }
-
-    private String getMess() {
+    private String getStringMess() {
         String mess = "";
         try {
             mess = read.readLine();
@@ -92,4 +81,64 @@ public class ClientHandler {
 
         return mess;
     }
+
+    private int getIntMess(){
+        int mess=0;
+        try {
+            mess = read.read();
+        } catch (IOException e) {
+            out.close();
+        }
+        return mess;
+    }
+
+    private boolean setPlateUser(String mess) {
+        boolean checkPlate;
+        checkPlate = checkerPlate.validatePlate(mess);
+        if (checkPlate){
+            plateUser = mess;
+            return true;
+        }
+        return false;
+    }
+
+    private void menuOutput(boolean findPlate){
+        if(findPlate){
+            out.println("1) Find car\n" +
+                    "2) Pay place\n" +
+                    "4) Exit");
+        }else{
+            out.println("3) New place");
+            out.println("4) Exit");
+        }
+    }
+
+    private void controllerChoise(int number){
+        switch(number){
+            case 1 ->{
+                parking.getPlace(plateUser);
+            }
+            case 2 ->{
+                parking.payPlace(plateUser);
+            }
+            case 3 ->{
+                parking.setNewPlace(plateUser);
+            }
+        }
+    }
+
+    ///////////////////////////////////////////////
+
+    /*private void loopPrint() {
+        String mess;
+        while (true) {
+            mess = getMess();
+            if(mess != null || !mess.equalsIgnoreCase("")) {
+            } else if (mess.equalsIgnoreCase("")) {
+                System.out.println("Client (" + ipClient + ") has disconnected!");
+                break;
+            }
+        }
+    }*/
+
 }

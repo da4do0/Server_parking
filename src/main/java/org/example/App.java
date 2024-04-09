@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.Instant;
 
 public class App {
     static int portNumber = 5001;
@@ -22,6 +23,9 @@ public class App {
             getServerSocket();
         }while(serverSocket == null);
         System.out.println("Use port: "+portNumber);
+        Instant now = Instant.now(); // Get the current instant
+        System.out.println(now); // Prints the instant in ISO-8601 format
+
         while (true) {
             getSocket();
             getIpClient();
@@ -56,5 +60,5 @@ public class App {
             portNumber ++;
         }
     }
-    }
+}
 

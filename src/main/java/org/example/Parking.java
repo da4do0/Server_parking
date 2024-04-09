@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.nio.file.Files;
 import java.util.Arrays;
@@ -23,8 +25,8 @@ public class Parking {
         checkFile = checkfile();
         emptyFile = checkDataFile();
         if (checkFile && !emptyFile){
-            Parking[] parkingArray = gson.fromJson(json, Parking[].class);
-            /*ArrayList<Place> listPlace = gson.fromJson(json, listType);*/
+            Place[] parkingArray = gson.fromJson(json, Place[].class);
+            ArrayList<Place> listPlace = gson.fromJson(json, ArrayList.class);
         }else{
             fillArrayList();
         }
@@ -85,5 +87,35 @@ public class Parking {
             }
         }
         return false;
+    }
+
+    public String getPlace(String plate){
+        for (int i = 0; i < listPlace.size(); i++) {
+            if(plate.equalsIgnoreCase(listPlace.get(i).getPlate())){
+                return listPlace.get(i).getNamePlace();
+            }
+        }
+        return null;
+    }
+
+    public boolean setNewPlace(String plate){
+        for (int i = 0; i < listPlace.size(); i++) {
+            if(listPlace.get(i).getPlate().equalsIgnoreCase("")){
+                listPlace.get(i).setPlate(plate);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void payPlace(String plate) {
+        //Duration duration = Duration.between(startTime, endTime);
+        //double minutes = duration.toMinutes();
+
+        // Assuming a minimum charge of 1 hour (60 minutes)
+        //double hours = Math.ceil(minutes / 60);
+        //double totalFee = hours * 2;
+
+        //return totalFee;
     }
 }
