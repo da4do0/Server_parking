@@ -25,9 +25,6 @@ public class App {
         }while(serverSocket == null);
         System.out.println("Use port: "+portNumber);
 
-        Date now = new Date();
-        System.out.println(now);
-
         while (true) {
             getSocket();
             getIpClient();

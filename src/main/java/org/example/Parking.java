@@ -21,23 +21,26 @@ public class Parking {
     File file = new File("src/main/java/data.json");
     private boolean checkFile;
     private boolean emptyFile;
-    Gson gson = new Gson();
-    private String json;
 
     public Parking() {
         checkFile = checkfile();
         emptyFile = checkDataFile();
         if (checkFile && !emptyFile) {
-            Place[] parkingArray = gson.fromJson(json, Place[].class);
-            ArrayList<Place> listPlace = gson.fromJson(json, ArrayList.class);
+            uploadArrayList();
         } else {
             fillArrayList();
         }
     }
 
+    private void uploadArrayList() {
+        Place[] arrayPlace= jsonFile.readJsonFile(file);
+        for (Place place : arrayPlace) {
+            listPlace.add(place);
+        }
+    }
+
     private boolean checkfile() {
         if (file.exists()) {
-            System.out.println("Il file JSON esiste.");
             return true;
         }
         return false;
@@ -45,7 +48,6 @@ public class Parking {
 
     private boolean checkDataFile() {
         if (file.length() == 0) {
-            System.out.println("The JSON file is empty.");
             return true;
         }
         return false;
@@ -57,35 +59,11 @@ public class Parking {
         }
     }
 
-    private void readJson() {
-        try {
-            FileReader reader = new FileReader(file);
-            StringBuilder stringBuilder = new StringBuilder();
-            int ch;
-            createStringBuilder(reader, stringBuilder);
-            reader.close();
-            json = stringBuilder.toString();
-        } catch (FileNotFoundException e) {
-            System.out.println("Errore nella lettura del file");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static void createStringBuilder(FileReader reader, StringBuilder stringBuilder) {
-        int ch;
-        while (true) {
-            try {
-                if (!((ch = reader.read()) != -1)) break;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            stringBuilder.append((char) ch);
-        }
-    }
-
     public boolean checkPlateParking(String plate) {
         if (plate != null) {
+            if(checkfile()){
+                uploadArrayList();
+            }
             for (int i = 0; i < listPlace.size(); i++) {
                 if (plate.equalsIgnoreCase(listPlace.get(i).getPlate())) {
                     return true;
@@ -115,6 +93,9 @@ public class Parking {
     }
 
     public String setNewPlace(String plate) {
+        if(checkfile()){
+            uploadArrayList();
+        }
         for (int i = 0; i < listPlace.size(); i++) {
             if (listPlace.get(i).getPlate().equalsIgnoreCase("")) {
                 listPlace.get(i).setPlate(plate);
@@ -129,7 +110,6 @@ public class Parking {
     private String createGsonObject() {
         Gson gson = new Gson();
         String ciao = gson.toJson(listPlace);
-        System.out.println(ciao);
         return ciao;
     }
 

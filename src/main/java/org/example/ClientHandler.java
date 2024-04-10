@@ -20,7 +20,6 @@ public class ClientHandler {
         this.socket = socket;
         this.ipClient = ipClient;
         parking = new Parking();
-        System.out.println("new client");
         ran();
     }
 
@@ -38,7 +37,6 @@ public class ClientHandler {
             }
             mess = translateAscii(mess);
             if (mess <5 && mess >0) {
-                System.out.println(mess);
                 if (mess == 4) {
                     System.out.println("exit");
                     out.close();
@@ -139,15 +137,20 @@ public class ClientHandler {
     }
 
     private boolean setPlateUser(String mess) {
-        boolean checkPlate;
+        int checkPlate;
         try {
-            //checkPlate = checkerPlate.validatePlate(mess);
-            plateUser = mess;
-            return true;
+            checkPlate = checkerPlate.validatePlate(mess);
+            if (checkPlate == 1) {
+                plateUser = mess;
+                return true;
+            }else if (checkPlate == -1){
+                shutdownClient();
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }
+        return false;
     }
 
     private void menuOutput(boolean findPlate) {
@@ -204,18 +207,5 @@ public class ClientHandler {
         out.println("Here is how much you have to pay: " + response);
     }
 
-    ///////////////////////////////////////////////
-
-    /*private void loopPrint() {
-        String mess;
-        while (true) {
-            mess = getMess();
-            if(mess != null || !mess.equalsIgnoreCase("")) {
-            } else if (mess.equalsIgnoreCase("")) {
-                System.out.println("Client (" + ipClient + ") has disconnected!");
-                break;
-            }
-        }
-    }*/
 
 }

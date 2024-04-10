@@ -1,10 +1,39 @@
 package org.example;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.google.gson.Gson;
+
+import java.io.*;
+import java.util.ArrayList;
 
 public class JsonReadWrite {
+
+    public Place[] readJsonFile(File file){
+        Gson gson = new Gson();
+
+        FileReader reader = null;
+        reader = openFileJson(file);
+        Place[] places = gson.fromJson(reader, Place[].class);
+        closeFileJson(reader);
+        return places;
+    }
+
+    private static FileReader openFileJson(File file) {
+        FileReader reader;
+        try {
+            reader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return reader;
+    }
+
+    private static void closeFileJson(FileReader reader) {
+        try {
+            reader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void writeJsonFile(String jsonString, File file){
         FileWriter writer = null;
