@@ -4,7 +4,7 @@ public class Place {
     static int count = 1;
     private String namePlace;
     private String plate="";
-    private int enter, escher;
+    private long enter=0;
 
     public Place(){
         namePlace = "A"+count;
@@ -27,19 +27,11 @@ public class Place {
         this.plate = plate;
     }
 
-    public int getEnter() {
+    public long getEnter() {
         return enter;
     }
 
-    public void setEnter(int enter) {
+    public void setEnter(long enter) {
         this.enter = enter;
-    }
-
-    public int getEscher() {
-        return escher;
-    }
-
-    public void setEscher(int escher) {
-        this.escher = escher;
     }
 }

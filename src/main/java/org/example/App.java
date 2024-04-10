@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.Instant;
+import java.util.Date;
 
 public class App {
     static int portNumber = 5001;
@@ -23,8 +24,9 @@ public class App {
             getServerSocket();
         }while(serverSocket == null);
         System.out.println("Use port: "+portNumber);
-        Instant now = Instant.now(); // Get the current instant
-        System.out.println(now); // Prints the instant in ISO-8601 format
+
+        Date now = new Date();
+        System.out.println(now);
 
         while (true) {
             getSocket();
