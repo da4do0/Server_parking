@@ -17,6 +17,7 @@ import java.util.Date;
 
 public class Parking {
     ArrayList<Place> listPlace = new ArrayList<Place>();
+    JsonReadWrite jsonFile = new JsonReadWrite();
     File file = new File("src/main/java/data.json");
     private boolean checkFile;
     private boolean emptyFile;
@@ -118,10 +119,18 @@ public class Parking {
             if (listPlace.get(i).getPlate().equalsIgnoreCase("")) {
                 listPlace.get(i).setPlate(plate);
                 listPlace.get(i).setEnter(getDate());
+                jsonFile.writeJsonFile(createGsonObject(), file);
                 return listPlace.get(i).getNamePlace();
             }
         }
         return null;
+    }
+
+    private String createGsonObject() {
+        Gson gson = new Gson();
+        String ciao = gson.toJson(listPlace);
+        System.out.println(ciao);
+        return ciao;
     }
 
     private long getDate() {
@@ -153,5 +162,6 @@ public class Parking {
     public void removePlateUser(int indexPlace) {
         listPlace.get(indexPlace).setEnter(0);
         listPlace.get(indexPlace).setPlate("");
+        jsonFile.writeJsonFile(createGsonObject(), file);
     }
 }
