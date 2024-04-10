@@ -2,10 +2,7 @@ package org.example;
 
 import com.google.gson.Gson;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
@@ -18,7 +15,8 @@ import java.util.Date;
 public class Parking {
     ArrayList<Place> listPlace = new ArrayList<Place>();
     JsonReadWrite jsonFile = new JsonReadWrite();
-    File file = new File("src/main/java/data.json");
+    File file = new File(String.valueOf(getClass().getResourceAsStream("/resorces/data.json")));
+
     private boolean checkFile;
     private boolean emptyFile;
 
