@@ -35,7 +35,7 @@ public class ClientHandler {
             if (mess == -1){
                 break;
             }
-            mess = translateAscii(mess);
+            mess = mess - 48;
             if (mess <5 && mess >0) {
                 if (mess == 4) {
                     System.out.println("exit");
@@ -114,26 +114,6 @@ public class ClientHandler {
             shutdownClient();
         }
         return mess;
-    }
-
-    private int translateAscii(int mess) {
-        switch (mess) {
-            case 49 -> {
-                return 1;
-            }
-            case 50 -> {
-                return 2;
-            }
-            case 51 -> {
-                return 3;
-            }
-            case 52 -> {
-                return 4;
-            }
-            default -> {
-                return -1;
-            }
-        }
     }
 
     private boolean setPlateUser(String mess) {

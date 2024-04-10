@@ -15,7 +15,7 @@ import java.util.Date;
 public class Parking {
     ArrayList<Place> listPlace = new ArrayList<Place>();
     JsonReadWrite jsonFile = new JsonReadWrite();
-    File file = new File(String.valueOf(getClass().getResourceAsStream("/resorces/data.json")));
+    File file = new File("data.json");
 
     private boolean checkFile;
     private boolean emptyFile;
