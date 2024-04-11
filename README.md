@@ -13,7 +13,7 @@ Il progetto consiste solo in un server capace di gestire le richieste da parte d
 ### Server
 Scaricare Il file jar da questa pagina [release](https://github.com/da4do0/Server_parking/releases/tag/1.0).
 
-Una volta scaricato (assicurarsi di avere installata la macchina virtuale di java), avviarlo tramite il comando java (esempio qui sotto).
+Una volta scaricato (assicurarsi di avere installata la macchina virtuale di java), create una cartella per poter metterci all'interno il file jar, infine avviarlo tramite il comando java (esempio qui sotto).
 > [!TIP]
 > Il server si mettera' in ascolto sulla porta 5001, in caso la porta sia occupata provera' con quella dopo finche' non riuscira' a connettersi.
 
