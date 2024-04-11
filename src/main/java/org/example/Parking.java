@@ -19,6 +19,7 @@ public class Parking {
 
     private boolean checkFile;
     private boolean emptyFile;
+    private boolean read;
 
     public Parking() {
         checkFile = checkfile();
@@ -59,9 +60,6 @@ public class Parking {
 
     public boolean checkPlateParking(String plate) {
         if (plate != null) {
-            if(checkfile()){
-                uploadArrayList();
-            }
             for (int i = 0; i < listPlace.size(); i++) {
                 if (plate.equalsIgnoreCase(listPlace.get(i).getPlate())) {
                     return true;
@@ -91,14 +89,12 @@ public class Parking {
     }
 
     public String setNewPlace(String plate) {
-        if(checkfile()){
-            uploadArrayList();
-        }
         for (int i = 0; i < listPlace.size(); i++) {
             if (listPlace.get(i).getPlate().equalsIgnoreCase("")) {
                 listPlace.get(i).setPlate(plate);
                 listPlace.get(i).setEnter(getDate());
                 jsonFile.writeJsonFile(createGsonObject(), file);
+                read= true;
                 return listPlace.get(i).getNamePlace();
             }
         }
